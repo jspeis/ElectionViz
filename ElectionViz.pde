@@ -18,12 +18,12 @@ void loadData() {
 }
 float xPos,yPos;
 void setup() {
-  size(640, 480);
+  size(720, 480);
   loadData();
   font = createFont("Arial", 14, true);
   textFont(font);
   background(BLACK);
-   xPos=width*.22;
+   xPos=width*.11;
    yPos = height*.8 - 20;
 
 }
@@ -34,8 +34,22 @@ void showOptions() {
   rect(120, 10, 100, buttonHeight);
 
   fill(BLACK);
+  if (obamaMode)
+    fill(WHITE);
   text("Obama", 35, 10+18);
+ 
+  fill(BLACK);
+  if (!obamaMode)
+    fill(WHITE); 
   text("Romney", 120+25, 10+18); 
+}
+
+void mousePressed() {
+  if (mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 30) {
+    obamaMode = true;
+  } else if (mouseX > 120 && mouseX < 220 && mouseY > 10 && mouseY < 30) {
+    obamaMode = false;
+  }
 }
 
 void mouseDragged() {
@@ -52,7 +66,8 @@ void makeSlider() {
   fill(GRAY);
   float pct = 100* (xPos -50) / 450.0 ;
   filterPct = int(pct);
-  text("Margin of Obama Victory: " + filterPct + "%", 50, height*.8-25);
+  String candidate = obamaMode ? "Obama" : "Romney";
+  text("Margin of " + candidate + " Victory: " + filterPct + "%", 50, height*.8-25);
   rect(50, height*.8, 450, 4);
   // make the moving part
   fill(WHITE);
@@ -61,8 +76,8 @@ void makeSlider() {
 
 void displayState(StateData state, int count) {
   int pctRomney = state.pctForRomney;
-  int a = 50 + (count%5)*110;
-  int b = 70+ (count / 5) * 50;
+  int a = 20 + (count%5)*130;
+  int b = 100+ (count / 5) * 50;
   String name = state.name;
   
   noStroke();
@@ -71,6 +86,9 @@ void displayState(StateData state, int count) {
   fill(255,0,0);
   noStroke();
   rect(a, b, pctRomney, 20);
+  fill(WHITE);
+  text(name, a, b-8);
+
 }
 
 void showRelevantStates() {
@@ -84,7 +102,7 @@ void showRelevantStates() {
     } else {
       // romney mode
        if (state.pctVictoryRomney >= filterPct)
-         println(state.name);
+         displayState(state, count++);
     }
   }
 }
