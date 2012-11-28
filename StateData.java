@@ -11,6 +11,8 @@ public class StateData {
   public double pctForObama;
   public int votesForRomney;
   public int pctForRomney;
+  public int pctVictoryObama;
+  public int pctVictoryRomney;
 
   // don't call this - use the factory method below
   public StateData() {
@@ -32,6 +34,10 @@ public class StateData {
     }
     state.votesForRomney = Integer.parseInt(columns[5]);
     state.pctForRomney = (int) Double.parseDouble(columns[6]);
+    int totalVotes = state.votesForObama+state.votesForRomney;
+    state.pctVictoryObama = (int) (100 * ((double)state.votesForObama - state.votesForRomney) / totalVotes);
+    state.pctVictoryRomney =(int) (100* ((double)state.votesForRomney - state.votesForObama) / totalVotes); 
+ 
     return state;
   }  
 }
